@@ -29,9 +29,16 @@ from cassandra.policies import (
     WhiteListRoundRobinPolicy,
 )
 
+from airflow import PY312
 from airflow.models import Connection
 from airflow.providers.apache.cassandra.hooks.cassandra import CassandraHook
 from airflow.utils import db
+
+pytestmark = pytest.mark.skipif(
+    PY312,
+    reason="Skip the test until cassandra python driver supports 3.12 out-of-the-box "
+    "(see https://datastax-oss.atlassian.net/browse/PYTHON-1375)",
+)
 
 
 @pytest.mark.integration("cassandra")

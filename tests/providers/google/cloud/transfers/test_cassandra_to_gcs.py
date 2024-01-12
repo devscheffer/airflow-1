@@ -22,6 +22,7 @@ from unittest.mock import call
 
 import pytest
 
+from airflow import PY312
 from airflow.providers.google.cloud.transfers.cassandra_to_gcs import CassandraToGCSOperator
 
 TMP_FILE_NAME = "temp-file"
@@ -30,6 +31,12 @@ SCHEMA = "schema.json"
 FILENAME = "data.json"
 CQL = "select * from keyspace1.table1"
 TASK_ID = "test-cas-to-gcs"
+
+pytestmark = pytest.mark.skipif(
+    PY312,
+    reason="Skip the test until cassandra python driver supports 3.12 out-of-the-box "
+    "(see https://datastax-oss.atlassian.net/browse/PYTHON-1375)",
+)
 
 
 class TestCassandraToGCS:

@@ -19,11 +19,21 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
+import pytest
+
+from airflow import PY312
 from airflow.providers.apache.cassandra.sensors.record import CassandraRecordSensor
 
 TEST_CASSANDRA_CONN_ID = "cassandra_default"
 TEST_CASSANDRA_TABLE = "t"
 TEST_CASSANDRA_KEY = {"foo": "bar"}
+
+
+pytestmark = pytest.mark.skipif(
+    PY312,
+    reason="Skip the test until cassandra python driver supports 3.12 out-of-the-box "
+    "(see https://datastax-oss.atlassian.net/browse/PYTHON-1375)",
+)
 
 
 class TestCassandraRecordSensor:
